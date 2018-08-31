@@ -1,4 +1,4 @@
 .wing
 .idea
 bin-debug
-libs/*
+*/libs/modules
