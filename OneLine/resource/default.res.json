@@ -1,0 +1,20 @@
+{
+	"groups": [
+		{
+			"keys": "egret_icon_png,pass_png",
+			"name": "preload"
+		}
+	],
+	"resources": [
+		{
+			"name": "egret_icon_png",
+			"type": "image",
+			"url": "assets/egret_icon.png"
+		},
+		{
+			"name": "pass_png",
+			"type": "image",
+			"url": "assets/pass.png"
+		}
+	]
+}
