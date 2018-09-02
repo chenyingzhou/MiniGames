@@ -6,7 +6,7 @@ class Line extends egret.Shape {
     public y2: number;
     public color: number;
 
-    public constructor(color: number = 0XFFFF00) {
+    public constructor(color: number = 0XDDDDDD) {
         super();
         this.color = color;
     }

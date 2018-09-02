@@ -40,7 +40,7 @@ class PlayArea extends egret.DisplayObjectContainer {
         this.currentTask = PlayArea.tasks[this.currentTaskNo];
 
         for (let i = 0; i < this.currentTask.length - 1; i++) {
-            let line = new Line(0X888888);
+            let line = new Line(0X666666);
             let [pointStartX, pointStartY] = PlayArea.computeXY(this.currentTask[i]);
             let [pointEndX, pointEndY] = PlayArea.computeXY(this.currentTask[i + 1]);
             line.setPoints(pointStartX, pointStartY, pointEndX, pointEndY);
