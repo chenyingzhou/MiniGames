@@ -93,7 +93,6 @@ class PlayArea extends egret.DisplayObjectContainer {
         }
         // 所有连线都已完成，不再继续准备连线
         if (this.dotRelation.length === this.currentTask.length - 1) {
-            TaskFinish.getInstance().show();
             return;
         }
         this.activeLine = new Line();

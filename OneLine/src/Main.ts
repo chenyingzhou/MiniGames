@@ -1,10 +1,7 @@
-import TaskFinish = Pip.TaskFinish;
-
 class Main extends egret.DisplayObjectContainer {
     protected static instance: Main;
     public backGround: BackGround;
     public playArea: PlayArea;
-    public taskSwitch: TaskSwitch;
 
     public constructor() {
         super();
@@ -25,17 +22,6 @@ class Main extends egret.DisplayObjectContainer {
         Main.instance = this;
         await Main.loadRes();
         this.backGround = new BackGround();
-
-        Main.loadScene("play");
-    }
-
-    public static loadScene(scene: string) {
-        switch (scene) {
-            case "play":
-                let playScene = Scene.Play.getInstance();
-                playScene.show();
-                break;
-            default:
-        }
+        this.addChild(Navigation.Navigation.getInstance());
     }
 }

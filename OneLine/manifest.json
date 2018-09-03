@@ -9,12 +9,10 @@
 		"libs/modules/promise/promise.js"
 	],
 	"game": [
-		"bin-debug/pip/TaskFinish.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/scene/Play.js",
 		"bin-debug/widget/BackGround.js",
-		"bin-debug/widget/TaskSwitch.js",
+		"bin-debug/widget/Navigation.js",
 		"bin-debug/widget/PlayArea/Dot.js",
 		"bin-debug/widget/PlayArea/Line.js",
 		"bin-debug/widget/PlayArea/PlayArea.js"
