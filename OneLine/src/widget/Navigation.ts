@@ -1,6 +1,5 @@
 namespace Navigation {
     export class Navigation extends egret.DisplayObjectContainer {
-        public static focusX: number;
         public static focusY: number;
         protected static instance: Navigation;
         protected focus: Focus;
@@ -18,15 +17,21 @@ namespace Navigation {
             let game = Main.getInstance();
             let stageWidth = game.stage.stageWidth;
             let stageHeight = game.stage.stageHeight;
-            Navigation.focusX = stageWidth - 24;
+            this.width = 130;
+            this.x = stageWidth - 130;
             Navigation.focusY = stageHeight / 5 * 3;
+
+            let bg = new BackGround();
+            this.addChild(bg);
+
             this.focus = new Focus();
-            this.focus.x = Navigation.focusX;
+            this.focus.x = 105;
             this.focus.y = Navigation.focusY;
-            this.list = new List();
-            this.list.x = Navigation.focusX - 40;
-            this.list.y = Navigation.focusY;
             this.addChild(this.focus);
+
+            this.list = new List();
+            this.list.x = 65;
+            this.list.y = Navigation.focusY;
             this.addChild(this.list);
         }
 
@@ -34,7 +39,7 @@ namespace Navigation {
          * 获取当前任务序号
          */
         public getCurrentTaskNo(): number {
-            let deltaH = Navigation.focusY - this.parent.y;
+            let deltaH = Navigation.focusY - this.list.y;
             return Math.round(deltaH / ListGrid.height);
         }
 
@@ -42,7 +47,7 @@ namespace Navigation {
          * 获取当前预览图的缩放比例
          */
         public getPreviewSize() {
-            let deltaH = Navigation.focusY - this.parent.y;
+            let deltaH = Navigation.focusY - this.list.y;
             let taskNo = Math.round(deltaH / ListGrid.height);
             return 1 - Math.abs(taskNo - deltaH / ListGrid.height) * 2
         }
