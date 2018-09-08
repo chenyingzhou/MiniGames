@@ -4,6 +4,7 @@ namespace Navigation {
         protected static instance: Navigation;
         protected focus: Focus;
         protected list: List;
+        protected touchArea: TouchArea;
 
         public static getInstance(): Navigation {
             if (!Navigation.instance) {
@@ -33,6 +34,42 @@ namespace Navigation {
             this.list.x = 65;
             this.list.y = Navigation.focusY;
             this.addChild(this.list);
+
+            this.touchArea = new TouchArea();
+            this.addChild(this.touchArea);
+        }
+
+        public scrollList(distance: number) {
+            this.list.y += distance;
+            if (this.list.y > Navigation.focusY) {
+                this.list.y = Navigation.focusY;
+            }
+            let currentTaskNo: number = this.getCurrentTaskNo();
+            let visibleMin = Math.max(0, currentTaskNo - 7);
+            let visibleMax = Math.min(99, currentTaskNo + 5);
+            for (let i = visibleMin; i <= visibleMax; i++) {
+                this.list.listGrids[i].updateAlpha();
+            }
+        }
+
+        public scrollAdjust() {
+            egret.startTick(this.onAdjust, this);
+        }
+
+        protected onAdjust() {
+            let currentTaskNo: number = this.getCurrentTaskNo();
+            let targetY = Navigation.focusY - ListGrid.height * currentTaskNo;
+            let step: number = 1;
+            if (this.list.y > targetY) {
+                this.list.y -= step;
+            } else {
+                this.list.y += step;
+            }
+            if (Math.abs(this.list.y - targetY) <= step) {
+                this.list.y = targetY;
+                egret.stopTick(this.onAdjust, this);
+            }
+            return true;
         }
 
         /**
@@ -69,7 +106,7 @@ namespace Navigation {
     }
 
     class List extends egret.DisplayObjectContainer {
-        protected listGrids: ListGrid[] = [];
+        public listGrids: ListGrid[] = [];
 
         public constructor() {
             super();
@@ -111,6 +148,67 @@ namespace Navigation {
 
         public updateAlpha() {
             this.alpha = 1 / (Math.abs((this.y - (Navigation.focusY - this.parent.y)) / this.height) + 1);
+        }
+    }
+
+    class TouchArea extends egret.Shape {
+        protected touchY: number = 0;
+        protected speedY: number = 0;
+        protected reduceCount: number = 0;
+
+        public constructor() {
+            super();
+            this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+        }
+
+        protected onAddToStage(e: egret.Event) {
+            this.width = this.parent.width;
+            this.height = this.parent.height;
+            this.graphics.beginFill(0x000000, 0);
+            this.graphics.drawRect(0, 0, this.width, this.height);
+            this.touchEnabled = true;
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+        }
+
+        protected onTouchBegin(e: egret.TouchEvent) {
+            this.touchY = e.stageY;
+            this.speedY = 0;
+        }
+
+        protected onTouchMove(e: egret.TouchEvent) {
+            if (this.touchY) {
+                let deltaY: number = e.localY - this.touchY;
+                Navigation.getInstance().scrollList(deltaY);
+                if (Math.abs(this.speedY) > Math.abs(deltaY) && this.reduceCount < 6) {
+                    this.reduceCount++;
+                } else {
+                    this.speedY = deltaY;
+                    this.reduceCount = 0;
+                }
+            }
+            this.touchY = e.stageY;
+        }
+
+        protected onTouchEnd(e: egret.TouchEvent) {
+            egret.startTick(this.onInertiaMove, this);
+        }
+
+        protected onInertiaMove() {
+            let acceleration: number = 1;
+            if (this.speedY > 0) {
+                this.speedY -= acceleration;
+            } else {
+                this.speedY += acceleration;
+            }
+            if (Math.abs(this.speedY) <= acceleration) {
+                this.speedY = 0;
+                egret.stopTick(this.onInertiaMove, this);
+                Navigation.getInstance().scrollAdjust();
+            }
+            Navigation.getInstance().scrollList(this.speedY);
+            return true;
         }
     }
 }
