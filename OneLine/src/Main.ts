@@ -23,7 +23,7 @@ class Main extends egret.DisplayObjectContainer {
         await Main.loadRes();
         this.backGround = new BackGround();
         this.addChild(this.backGround);
-        this.addChild(Navigation.Navigation.getInstance());
         this.addChild(PlayArea.PlayArea.getInstance());
+        this.addChild(Navigation.Navigation.getInstance());
     }
 }

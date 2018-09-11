@@ -31,7 +31,7 @@ namespace PlayArea {
             this.background.graphics.beginFill(0x00FFFF);
             this.background.graphics.drawRect(0, 0, Main.getInstance().stage.stageWidth, PlayArea.gridWidth * 8 + PlayArea.reservedH * 2);
             this.background.alpha = 0;
-            this.switchTo(DataProvider.getPassTask(), 1);
+            this.switchTo(DataProvider.getTopTask(), 1);
         }
 
         /**

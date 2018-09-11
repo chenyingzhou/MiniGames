@@ -32,7 +32,7 @@ namespace Navigation {
 
             this.list = new List();
             this.list.x = 65;
-            this.list.y = Navigation.focusY;
+            this.list.y = Navigation.focusY - ListGrid.height * DataProvider.getTopTask();
             this.addChild(this.list);
 
             this.touchArea = new TouchArea();
@@ -43,6 +43,9 @@ namespace Navigation {
             this.list.y += distance;
             if (this.list.y > Navigation.focusY) {
                 this.list.y = Navigation.focusY;
+            }
+            if (this.list.y < Navigation.focusY - ListGrid.height * DataProvider.getTopTask()) {
+                this.list.y = Navigation.focusY - ListGrid.height * DataProvider.getTopTask();
             }
             let currentTaskNo: number = this.getCurrentTaskNo();
             let visibleMin = Math.max(0, currentTaskNo - 7);
