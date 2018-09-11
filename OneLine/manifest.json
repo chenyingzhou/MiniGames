@@ -13,6 +13,7 @@
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
 		"bin-debug/widget/BackGround.js",
+		"bin-debug/widget/Button.js",
 		"bin-debug/widget/Navigation.js",
 		"bin-debug/widget/PlayArea.js"
 	]

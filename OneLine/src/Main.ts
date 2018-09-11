@@ -1,3 +1,5 @@
+import tr = egret.sys.tr;
+
 class Main extends egret.DisplayObjectContainer {
     protected static instance: Main;
     public backGround: BackGround;
@@ -23,7 +25,39 @@ class Main extends egret.DisplayObjectContainer {
         await Main.loadRes();
         this.backGround = new BackGround();
         this.addChild(this.backGround);
-        this.addChild(PlayArea.PlayArea.getInstance());
+        let playArea = PlayArea.PlayArea.getInstance();
+        playArea.scaleX = playArea.scaleY = 0.8;
+        playArea.touchChildren = false;
+        playArea.touchEnabled = false;
+        this.addChild(playArea);
         this.addChild(Navigation.Navigation.getInstance());
+
+        let startButton = new Button(Button.START);
+        startButton.x = 220;
+        startButton.y = 640;
+        this.addChild(startButton);
+    }
+
+    public startTask() {
+        let navigation = Navigation.Navigation.getInstance();
+        let playArea = PlayArea.PlayArea.getInstance();
+        navigation.touchChildren = navigation.touchEnabled = false;
+        playArea.touchChildren = playArea.touchEnabled = false;
+        egret.startTick(this.onStartTask, this);
+    }
+
+    protected onStartTask() {
+        Navigation.Navigation.getInstance().x += 7;
+        let playArea = PlayArea.PlayArea.getInstance();
+        playArea.scaleX += 0.01;
+        playArea.scaleY += 0.01;
+        if (playArea.scaleX >= 1) {
+            playArea.scaleX = 1;
+            playArea.scaleY = 1;
+            playArea.touchEnabled = true;
+            playArea.touchChildren = true;
+            egret.stopTick(this.onStartTask, this);
+        }
+        return true;
     }
 }
