@@ -50,6 +50,7 @@ namespace Navigation {
             for (let i = visibleMin; i <= visibleMax; i++) {
                 this.list.listGrids[i].updateAlpha();
             }
+            PlayArea.PlayArea.getInstance().switchTo(currentTaskNo, this.getPreviewSize());
         }
 
         public scrollAdjust() {
@@ -60,13 +61,11 @@ namespace Navigation {
             let currentTaskNo: number = this.getCurrentTaskNo();
             let targetY = Navigation.focusY - ListGrid.height * currentTaskNo;
             let step: number = 1;
-            if (this.list.y > targetY) {
-                this.list.y -= step;
-            } else {
-                this.list.y += step;
-            }
-            if (Math.abs(this.list.y - targetY) <= step) {
-                this.list.y = targetY;
+            let direction = targetY - this.list.y > 0 ? 1 : -1;
+            this.scrollList(step * direction);
+            if (Math.abs(targetY - this.list.y) <= step) {
+                let distance = targetY - this.list.y;
+                this.scrollList(distance);
                 egret.stopTick(this.onAdjust, this);
             }
             return true;

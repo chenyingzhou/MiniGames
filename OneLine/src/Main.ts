@@ -1,7 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     protected static instance: Main;
     public backGround: BackGround;
-    public playArea: PlayArea;
+    public playArea: PlayArea.PlayArea;
 
     public constructor() {
         super();
@@ -22,6 +22,8 @@ class Main extends egret.DisplayObjectContainer {
         Main.instance = this;
         await Main.loadRes();
         this.backGround = new BackGround();
+        this.addChild(this.backGround);
         this.addChild(Navigation.Navigation.getInstance());
+        this.addChild(PlayArea.PlayArea.getInstance());
     }
 }
