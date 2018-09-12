@@ -149,7 +149,11 @@ namespace Navigation {
         }
 
         public updateAlpha() {
-            this.alpha = 1 / (Math.abs((this.y - (Navigation.focusY - this.parent.y)) / this.height) + 1);
+            if (parseInt(this.text) > DataProvider.getTopTask()) {
+                this.alpha = 0.1;
+            } else {
+                this.alpha = 4 / (Math.abs((this.y - (Navigation.focusY - this.parent.y)) / this.height) + 4);
+            }
         }
     }
 
