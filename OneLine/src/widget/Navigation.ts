@@ -176,6 +176,10 @@ namespace Navigation {
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+            this.addEventListener(egret.TouchEvent.TOUCH_RELEASE_OUTSIDE, (e: egret.TouchEvent) => {
+                this.speedY = 0;
+                this.onTouchEnd(e);
+            }, this);
         }
 
         protected onTouchBegin(e: egret.TouchEvent) {
