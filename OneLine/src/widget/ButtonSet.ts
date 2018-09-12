@@ -5,6 +5,8 @@ namespace ButtonSet {
             "start": new Button(Button.START),
             "rank": new Button(Button.RANK),
             "share": new Button(Button.SHARE),
+            "reset": new Button(Button.RESET),
+            "back": new Button(Button.BACK),
         };
 
         public static getInstance(): ButtonSet {
@@ -43,6 +45,8 @@ namespace ButtonSet {
         public static START: string = "start";
         public static RANK: string = "rank";
         public static SHARE: string = "share";
+        public static RESET: string = "reset";
+        public static BACK: string = "back";
 
         public constructor(type: string) {
             super();
@@ -59,6 +63,12 @@ namespace ButtonSet {
                 case Button.SHARE:
                     this.drawShare();
                     break;
+                case Button.RESET:
+                    this.drawReset();
+                    break;
+                case Button.BACK:
+                    this.drawBack();
+                    break;
                 default:
                     throw new Error("");
             }
@@ -74,6 +84,7 @@ namespace ButtonSet {
             this.graphics.lineStyle(3, 0xffffff);
             this.graphics.drawCircle(60, 60, 60);
 
+            this.graphics.lineStyle(5, 0xffffff);
             this.graphics.moveTo(105, 60);
             this.graphics.lineTo(37.5, 18.75);
             this.graphics.lineTo(37.5, 101.25);
@@ -94,6 +105,7 @@ namespace ButtonSet {
             this.graphics.lineStyle(3, 0xffffff);
             this.graphics.drawCircle(60, 60, 60);
 
+            this.graphics.lineStyle(4, 0xffffff);
             this.graphics.moveTo(93.75, 97.5);
             this.graphics.lineTo(26.25, 97.5);
             this.graphics.lineTo(26.25, 45);
@@ -133,6 +145,50 @@ namespace ButtonSet {
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
                 //TODO: 分享
+            }, this);
+        }
+
+        protected drawReset() {
+            let bg = new egret.Shape();
+            bg.graphics.beginFill(0x000000, 0);
+            bg.graphics.drawRect(0, 0, 120, 120);
+            bg.graphics.endFill();
+            this.addChild(bg);
+
+            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.drawCircle(60, 60, 60);
+
+            this.graphics.lineStyle(5, 0xffffff);
+            this.graphics.drawArc(60, 60, 35, Math.PI * (-0.5), Math.PI);
+
+            this.graphics.moveTo(17, 71);
+            this.graphics.lineTo(25, 60);
+            this.graphics.lineTo(35, 68);
+
+            this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+                //TODO: 重新开始
+            }, this);
+        }
+
+        protected drawBack() {
+            let bg = new egret.Shape();
+            bg.graphics.beginFill(0x000000, 0);
+            bg.graphics.drawRect(0, 0, 120, 120);
+            bg.graphics.endFill();
+            this.addChild(bg);
+
+            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.drawCircle(60, 60, 60);
+
+            this.graphics.lineStyle(5, 0xffffff);
+            this.graphics.moveTo(100, 60);
+            this.graphics.lineTo(20, 60);
+            this.graphics.moveTo(40, 40);
+            this.graphics.lineTo(20, 60);
+            this.graphics.lineTo(40, 80);
+
+            this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+                //TODO: 返回
             }, this);
         }
     }
