@@ -4,7 +4,7 @@ namespace PlayArea {
         public activeLine: Line;
         public background: egret.Shape;
         public dotRelation: number[] = [];
-        public static gridWidth = 40;  // 棋盘每格宽/高度
+        public static gridWidth = 60;  // 棋盘每格宽/高度
         public static reservedH = 100; // 上下预留空间
         protected static instance;
         protected currentTaskNo;
