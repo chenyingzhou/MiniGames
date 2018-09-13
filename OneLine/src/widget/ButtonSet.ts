@@ -1,6 +1,7 @@
 namespace ButtonSet {
     export class ButtonSet extends egret.DisplayObjectContainer {
         protected static instance: ButtonSet;
+        protected currentScene: string;
         protected buttons = {
             "start": new Button(Button.START),
             "rank": new Button(Button.RANK),
@@ -24,20 +25,113 @@ namespace ButtonSet {
         protected onAddToStage(e: egret.Event) {
             this.width = this.stage.stageWidth;
             this.height = 120;
-            this.loadCommon();
+            this.loadCommon(false);
         }
 
-        public loadCommon() {
-            this.scaleX = this.scaleY = 0.8;
-            this.buttons.share.x = this.width / 4;
-            this.buttons.share.y = this.height / 2;
-            this.addChild(this.buttons.share);
-            this.buttons.rank.x = this.width / 4 * 2;
-            this.buttons.rank.y = this.height / 2;
-            this.addChild(this.buttons.rank);
-            this.buttons.start.x = this.width / 4 * 3;
-            this.buttons.start.y = this.height / 2;
-            this.addChild(this.buttons.start)
+        public loadCommon(animation: boolean = true) {
+            let load = () => {
+                this.removeChildren();
+                this.buttons.share.x = this.width / 4;
+                this.buttons.share.y = this.height / 2;
+                this.addChild(this.buttons.share);
+                this.buttons.rank.x = this.width / 4 * 2;
+                this.buttons.rank.y = this.height / 2;
+                this.addChild(this.buttons.rank);
+                this.buttons.start.x = this.width / 4 * 3;
+                this.buttons.start.y = this.height / 2;
+                this.addChild(this.buttons.start);
+            };
+            let onAnimationOut = () => {
+                if (this.alpha > 0) {
+                    this.scaleX -= 0.01;
+                    this.scaleY -= 0.01;
+                    this.alpha -= 0.1;
+                } else {
+                    this.alpha = 0;
+                    this.currentScene = "common";
+                    load();
+                    egret.stopTick(onAnimationOut, this);
+                }
+                return true;
+            };
+            let onAnimationIn = () => {
+                if ("common" != this.currentScene) {
+                    return false;
+                }
+                if (this.alpha < 1) {
+                    this.scaleX -= 0.01;
+                    this.scaleY -= 0.01;
+                    this.alpha += 0.1;
+                } else {
+                    this.scaleX = this.scaleY = 0.8;
+                    this.alpha = 1;
+                    this.currentScene = "";
+                    egret.stopTick(onAnimationIn, this);
+                }
+                return true;
+            };
+
+            if (!animation) {
+                this.scaleX = this.scaleY = 0.8;
+                this.alpha = 1;
+                load();
+            } else {
+                egret.startTick(onAnimationOut, this);
+                egret.startTick(onAnimationIn, this);
+            }
+        }
+
+        public loadStart(animation: boolean = true) {
+            let load = () => {
+                this.removeChildren();
+                this.buttons.share.x = this.width / 4;
+                this.buttons.share.y = this.height / 2;
+                this.addChild(this.buttons.share);
+                this.buttons.reset.x = this.width / 4 * 2;
+                this.buttons.reset.y = this.height / 2;
+                this.addChild(this.buttons.reset);
+                this.buttons.back.x = this.width / 4 * 3;
+                this.buttons.back.y = this.height / 2;
+                this.addChild(this.buttons.back);
+            };
+            let onAnimationOut = () => {
+                if (this.alpha > 0) {
+                    this.scaleX += 0.01;
+                    this.scaleY += 0.01;
+                    this.alpha -= 0.1;
+                } else {
+                    this.alpha = 0;
+                    this.currentScene = "start";
+                    load();
+                    egret.stopTick(onAnimationOut, this);
+                }
+                return true;
+            };
+            let onAnimationIn = () => {
+                if ("start" != this.currentScene) {
+                    return false;
+                }
+                if (this.alpha < 1) {
+                    this.scaleX += 0.01;
+                    this.scaleY += 0.01;
+                    this.alpha += 0.1;
+                } else {
+                    this.scaleX = this.scaleY = 1;
+                    this.alpha = 1;
+                    this.currentScene = "";
+                    egret.stopTick(onAnimationIn, this);
+                }
+                return true;
+            };
+
+            if (!animation) {
+                this.scaleX = this.scaleY = 1;
+                this.alpha = 1;
+                load();
+            } else {
+                egret.startTick(onAnimationOut, this);
+                egret.startTick(onAnimationIn, this);
+            }
         }
     }
 
@@ -188,7 +282,7 @@ namespace ButtonSet {
             this.graphics.lineTo(40, 80);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-                //TODO: 返回
+                Main.getInstance().endTask();
             }, this);
         }
     }

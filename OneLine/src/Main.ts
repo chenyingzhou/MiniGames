@@ -40,20 +40,42 @@ class Main extends egret.DisplayObjectContainer {
     public startTask() {
         this.navigation.touchChildren = this.navigation.touchEnabled = false;
         this.playArea.touchChildren = this.playArea.touchEnabled = false;
-        egret.startTick(this.onStartTask, this);
+        this.buttonSet.touchChildren = this.buttonSet.touchEnabled = false;
+        this.buttonSet.loadStart();
+        let onStartTask = () => {
+            this.navigation.x += 7;
+            this.playArea.scaleX += 0.01;
+            this.playArea.scaleY += 0.01;
+            if (this.playArea.scaleX >= 1) {
+                this.playArea.scaleX = 1;
+                this.playArea.scaleY = 1;
+                this.playArea.touchChildren = this.playArea.touchEnabled = true;
+                this.buttonSet.touchChildren = this.buttonSet.touchEnabled = true;
+                egret.stopTick(onStartTask, this);
+            }
+            return true;
+        };
+        egret.startTick(onStartTask, this);
     }
 
-    protected onStartTask() {
-        this.navigation.x += 7;
-        this.playArea.scaleX += 0.01;
-        this.playArea.scaleY += 0.01;
-        if (this.playArea.scaleX >= 1) {
-            this.playArea.scaleX = 1;
-            this.playArea.scaleY = 1;
-            this.playArea.touchEnabled = true;
-            this.playArea.touchChildren = true;
-            egret.stopTick(this.onStartTask, this);
-        }
-        return true;
+    public endTask() {
+        this.navigation.touchChildren = this.navigation.touchEnabled = false;
+        this.playArea.touchChildren = this.playArea.touchEnabled = false;
+        this.buttonSet.touchChildren = this.buttonSet.touchEnabled = false;
+        this.buttonSet.loadCommon();
+        let onEndTask = () => {
+            this.navigation.x -= 7;
+            this.playArea.scaleX -= 0.01;
+            this.playArea.scaleY -= 0.01;
+            if (this.playArea.scaleX <= 0.8) {
+                this.playArea.scaleX = 0.8;
+                this.playArea.scaleY = 0.8;
+                this.navigation.touchChildren = this.navigation.touchEnabled = true;
+                this.buttonSet.touchChildren = this.buttonSet.touchEnabled = true;
+                egret.stopTick(onEndTask, this);
+            }
+            return true;
+        };
+        egret.startTick(onEndTask, this);
     }
 }
