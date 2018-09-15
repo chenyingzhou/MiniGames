@@ -126,6 +126,7 @@ namespace PlayArea {
                 this.touchEnabled = false;
                 this.touchChildren = false;
                 setTimeout(() => {
+                    DataProvider.setTopTask(this.currentTaskNo + 1);
                     this.reset();
                     Main.getInstance().endTask();
                 }, 1000);

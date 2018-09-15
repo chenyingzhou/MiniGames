@@ -16,7 +16,7 @@ class DataProvider {
     }
 
     public static getTopTask() {
-        return 26;
+        return DataProvider.topTask;
     }
 
     public static setTopTask(passTask: number) {

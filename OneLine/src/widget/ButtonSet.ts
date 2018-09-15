@@ -260,7 +260,7 @@ namespace ButtonSet {
             this.graphics.lineTo(35, 68);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-                //TODO: 重新开始
+                PlayArea.PlayArea.getInstance().reset();
             }, this);
         }
 
@@ -282,7 +282,8 @@ namespace ButtonSet {
             this.graphics.lineTo(40, 80);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
-                Main.getInstance().endTask();
+                PlayArea.PlayArea.getInstance().reset();
+                Main.getInstance().endTask(false);
             }, this);
         }
     }

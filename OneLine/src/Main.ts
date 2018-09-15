@@ -58,7 +58,7 @@ class Main extends egret.DisplayObjectContainer {
         egret.startTick(onStartTask, this);
     }
 
-    public endTask() {
+    public endTask(pass: boolean = true) {
         this.navigation.touchChildren = this.navigation.touchEnabled = false;
         this.playArea.touchChildren = this.playArea.touchEnabled = false;
         this.buttonSet.touchChildren = this.buttonSet.touchEnabled = false;
@@ -72,9 +72,11 @@ class Main extends egret.DisplayObjectContainer {
                 this.playArea.scaleY = 0.8;
                 this.navigation.touchChildren = this.navigation.touchEnabled = true;
                 this.buttonSet.touchChildren = this.buttonSet.touchEnabled = true;
-                setTimeout(() => {
-                    this.navigation.scrollToNext();
-                }, 200);
+                if (pass) {  // 过关则切换到下一关
+                    setTimeout(() => {
+                        this.navigation.scrollToNext();
+                    }, 200);
+                }
                 egret.stopTick(onEndTask, this);
             }
             return true;
