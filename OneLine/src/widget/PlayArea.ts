@@ -42,45 +42,51 @@ namespace PlayArea {
          */
         public switchTo(taskNo: number, alpha: number): void {
             if (taskNo != this.currentTaskNo) {
-                this.removeChildren();
-                this.activeDot = null;
-                this.activeLine = null;
-                this.dotRelation = [];
-                this.lines = [];
-                this.dots = [];
-                // 背景
-                this.addChild(this.background);
-
                 this.currentTaskNo = taskNo;
-                this.currentTask = PlayArea.tasks[this.currentTaskNo];
-
-                for (let i = 0; i < this.currentTask.length - 1; i++) {
-                    let line = new Line(0X666666);
-                    let [pointStartX, pointStartY] = PlayArea.computeXY(this.currentTask[i]);
-                    let [pointEndX, pointEndY] = PlayArea.computeXY(this.currentTask[i + 1]);
-                    line.setPoints(pointStartX, pointStartY, pointEndX, pointEndY);
-                    this.lines.push(line);
-                    this.addChild(line);
-                }
-
-                // 点去重并添加
-                let pointArr: string[] = [];
-                for (let i = 0; i < this.currentTask.length; i++) {
-                    if (-1 === pointArr.indexOf(this.currentTask[i].toString())) {
-                        pointArr.push(this.currentTask[i].toString());
-                        let dot: Dot = new Dot();
-                        dot.tablePos = this.currentTask[i];
-                        [dot.x, dot.y] = PlayArea.computeXY(this.currentTask[i]);
-                        this.dots.push(dot);
-                        this.addChild(dot);
-                    }
-                }
+                this.reset();
             }
             for (let line of this.lines) {
                 line.alpha = (alpha - 0.5) * 2;
             }
             for (let dot of this.dots) {
                 dot.scaleX = dot.scaleY = alpha;
+            }
+        }
+
+        /**
+         * 重新加载当前关卡
+         */
+        public reset() {
+            this.removeChildren();
+            this.activeDot = null;
+            this.activeLine = null;
+            this.dotRelation = [];
+            this.lines = [];
+            this.dots = [];
+            // 背景
+            this.addChild(this.background);
+            this.currentTask = PlayArea.tasks[this.currentTaskNo];
+
+            for (let i = 0; i < this.currentTask.length - 1; i++) {
+                let line = new Line(0X666666);
+                let [pointStartX, pointStartY] = PlayArea.computeXY(this.currentTask[i]);
+                let [pointEndX, pointEndY] = PlayArea.computeXY(this.currentTask[i + 1]);
+                line.setPoints(pointStartX, pointStartY, pointEndX, pointEndY);
+                this.lines.push(line);
+                this.addChild(line);
+            }
+
+            // 点去重并添加
+            let pointArr: string[] = [];
+            for (let i = 0; i < this.currentTask.length; i++) {
+                if (-1 === pointArr.indexOf(this.currentTask[i].toString())) {
+                    pointArr.push(this.currentTask[i].toString());
+                    let dot: Dot = new Dot();
+                    dot.tablePos = this.currentTask[i];
+                    [dot.x, dot.y] = PlayArea.computeXY(this.currentTask[i]);
+                    this.dots.push(dot);
+                    this.addChild(dot);
+                }
             }
         }
 
@@ -117,6 +123,12 @@ namespace PlayArea {
             }
             // 所有连线都已完成，不再继续准备连线
             if (this.dotRelation.length === this.currentTask.length - 1) {
+                this.touchEnabled = false;
+                this.touchChildren = false;
+                setTimeout(() => {
+                    this.reset();
+                    Main.getInstance().endTask();
+                }, 1000);
                 return;
             }
             this.activeLine = new Line();
@@ -208,7 +220,7 @@ namespace PlayArea {
             this.touchEnabled = true;
             this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-            this.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchMove,this); // 点击事件视为TOUCH_MOVE
+            this.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchMove, this); // 点击事件视为TOUCH_MOVE
         }
 
         public drawBody(): void {

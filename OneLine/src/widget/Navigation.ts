@@ -74,6 +74,23 @@ namespace Navigation {
             return true;
         }
 
+        public scrollToNext() {
+            let deltaY = 0;
+            let distance = 3;
+            let onAnimation = () => {
+                deltaY += distance;
+                if (deltaY < ListGrid.height) {
+                    this.scrollList(-distance);
+                } else {  // 防止移动距离大于格子高度
+                    distance = deltaY - ListGrid.height;
+                    this.scrollList(-distance);
+                    egret.stopTick(onAnimation, this);
+                }
+                return true;
+            };
+            egret.startTick(onAnimation, this);
+        }
+
         /**
          * 获取当前任务序号
          */

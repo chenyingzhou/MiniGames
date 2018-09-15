@@ -72,6 +72,9 @@ class Main extends egret.DisplayObjectContainer {
                 this.playArea.scaleY = 0.8;
                 this.navigation.touchChildren = this.navigation.touchEnabled = true;
                 this.buttonSet.touchChildren = this.buttonSet.touchEnabled = true;
+                setTimeout(() => {
+                    this.navigation.scrollToNext();
+                }, 200);
                 egret.stopTick(onEndTask, this);
             }
             return true;
