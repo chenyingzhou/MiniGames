@@ -1,5 +1,11 @@
+# OS files
+.DS_Store
+desktop.ini
+
+# IDE files
 .wing
 .idea
+
 bin-debug
 *_wxgame
 */*/libs/modules
