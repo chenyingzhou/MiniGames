@@ -22,7 +22,8 @@ namespace Navigation {
             this.x = stageWidth - 130;
             Navigation.focusY = stageHeight / 5 * 3;
 
-            let bg = new BackGround();
+            let bg = new egret.Shape();
+            bg.graphics.drawRect(0, 0, stageWidth, stageHeight);
             this.addChild(bg);
 
             this.focus = new Focus();

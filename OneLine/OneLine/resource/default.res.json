@@ -1,20 +1,30 @@
 {
 	"groups": [
 		{
-			"keys": "egret_icon_png,pass_png",
+			"keys": "cover_png,share_png,rank_png,music_png",
 			"name": "preload"
 		}
 	],
 	"resources": [
 		{
-			"name": "egret_icon_png",
+			"url": "assets/images/cover.png",
 			"type": "image",
-			"url": "assets/egret_icon.png"
+			"name": "cover_png"
 		},
 		{
-			"name": "pass_png",
+			"url": "assets/images/share.png",
 			"type": "image",
-			"url": "assets/pass.png"
+			"name": "share_png"
+		},
+		{
+			"url": "assets/images/rank.png",
+			"type": "image",
+			"name": "rank_png"
+		},
+		{
+			"url": "assets/images/music.png",
+			"type": "image",
+			"name": "music_png"
 		}
 	]
 }

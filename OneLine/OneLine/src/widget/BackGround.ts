@@ -1,12 +1,19 @@
-class BackGround extends egret.Shape {
+class BackGround extends egret.Sprite {
+    private img: egret.Bitmap;
     public constructor() {
         super();
         this.drawBody();
     }
 
     public drawBody(): void {
-        this.graphics.beginFill(0X333333);
-        this.graphics.drawRect(0, 0, Main.getInstance().stage.stageWidth, Main.getInstance().stage.stageHeight);
-        this.graphics.endFill();
+        let game = Main.getInstance();
+        let stageWidth: number = game.stage.stageWidth;
+        let stageHeight: number = game.stage.stageHeight;
+        let img: egret.Bitmap = new egret.Bitmap();
+        img.texture = RES.getRes("cover_png");
+        this.width = img.width = stageWidth;
+        this.height = img.height = stageHeight;
+        this.img = img;
+        this.addChild(this.img);
     }
 }
