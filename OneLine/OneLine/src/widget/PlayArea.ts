@@ -208,7 +208,40 @@ namespace PlayArea {
             }
             return false;
         }
+
+        /**
+         * 自动播放一次
+         */
+        public async autoPlay(): Promise<any > {
+            let autoLines: Line[] =  [];
+            for (let i = 0; i < this.currentTask.length - 1; ++i) {
+                let line = new Line();
+                [line.x1, line.y1, line.x2, line.y2] = [...PlayArea.computeXY(this.currentTask[i]), ...PlayArea.computeXY(this.currentTask[i + 1])];
+                autoLines.push(line);
+                this.addChild(line);
+                await line.drawBodyGradually();
+            }
+            let waitTime = 0;
+            let callback = () => {
+                waitTime++;
+                if (60 === waitTime) {
+                    this.dispatchEvent(new egret.Event("WAIT_COMPLETE"));
+                    egret.stopTick(callback, this);
+                }
+                return false;
+            };
+            egret.startTick(callback, this);
+            return new Promise((resolve, reject) => {
+                this.addEventListener("WAIT_COMPLETE", () => {
+                    for (let i = autoLines.length - 1; i >= 0; --i) {
+                        this.removeChild(autoLines.pop());
+                    }
+                    resolve();
+                }, this);
+            });
+        }
     }
+    
 
     class Dot extends egret.Shape {
         public static bodyR = 26;
@@ -291,6 +324,33 @@ namespace PlayArea {
             this.graphics.moveTo(this.x1, this.y1);
             this.graphics.lineTo(this.x2, this.y2);
             this.graphics.endFill();
+        }
+
+        public async drawBodyGradually() :Promise<any> {
+            let speed: number = 4;
+            let distance: number = Math.pow(Math.pow(this.y2 - this.y1, 2) + Math.pow(this.x2 - this.x1, 2), 0.5);
+            let autoTotal = Math.floor(distance / speed);
+            let autoPass = 0;
+            let callback = () => {
+                let endPoint: number[] = [this.x1 + (this.x2 - this.x1) / autoTotal * autoPass, this.y1 + (this.y2 - this.y1) / autoTotal * autoPass];
+                this.graphics.clear();
+                this.graphics.lineStyle(Line.lineW, 0XFF0000);
+                this.graphics.moveTo(this.x1, this.y1);
+                this.graphics.lineTo(endPoint[0], endPoint[1]);
+                this.graphics.endFill();
+                autoPass++;
+                if (autoPass === autoTotal) {
+                    this.dispatchEvent(new egret.Event("LINE_COMPLETE"));
+                    egret.stopTick(callback, this);
+                }
+                return true;
+            };
+            egret.startTick(callback, this);
+            return new Promise((resolve, reject) => {
+                this.addEventListener("LINE_COMPLETE", () => {
+                    resolve();
+                }, this);
+            });
         }
     }
 }
