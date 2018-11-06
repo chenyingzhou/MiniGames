@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "cover_png,share_png,rank_png,music_png",
+			"keys": "cover_png,share_png,rank_png,music_png,play_png",
 			"name": "preload"
 		}
 	],
@@ -25,6 +25,11 @@
 			"url": "assets/images/music.png",
 			"type": "image",
 			"name": "music_png"
+		},
+		{
+			"name": "play_png",
+			"type": "image",
+			"url": "assets/images/play.png"
 		}
 	]
 }

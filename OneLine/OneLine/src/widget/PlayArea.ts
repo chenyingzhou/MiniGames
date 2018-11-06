@@ -12,6 +12,7 @@ namespace PlayArea {
         protected dots: Dot[] = [];
         protected lines: Line[] = [];
         protected static tasks: [number, number][][] = DataProvider.getTasks();
+        public static isAutoPlay: boolean = true;
 
         public static getInstance(): PlayArea {
             if (!PlayArea.instance) {
@@ -20,7 +21,7 @@ namespace PlayArea {
             return PlayArea.instance;
         }
 
-        protected constructor() {
+        public constructor() {
             super();
             this.touchEnabled = true;
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
@@ -68,7 +69,7 @@ namespace PlayArea {
             this.currentTask = PlayArea.tasks[this.currentTaskNo];
 
             for (let i = 0; i < this.currentTask.length - 1; i++) {
-                let line = new Line(0X666666);
+                let line = new Line(0XAAAAAA);
                 let [pointStartX, pointStartY] = PlayArea.computeXY(this.currentTask[i]);
                 let [pointEndX, pointEndY] = PlayArea.computeXY(this.currentTask[i + 1]);
                 line.setPoints(pointStartX, pointStartY, pointEndX, pointEndY);
@@ -218,7 +219,7 @@ namespace PlayArea {
                 let line = new Line();
                 [line.x1, line.y1, line.x2, line.y2] = [...PlayArea.computeXY(this.currentTask[i]), ...PlayArea.computeXY(this.currentTask[i + 1])];
                 autoLines.push(line);
-                this.addChild(line);
+                this.addChildAt(line, this.getChildIndex(this.dots[0]));
                 await line.drawBodyGradually();
             }
             let waitTime = 0;
@@ -334,7 +335,7 @@ namespace PlayArea {
             let callback = () => {
                 let endPoint: number[] = [this.x1 + (this.x2 - this.x1) / autoTotal * autoPass, this.y1 + (this.y2 - this.y1) / autoTotal * autoPass];
                 this.graphics.clear();
-                this.graphics.lineStyle(Line.lineW, 0XFF0000);
+                this.graphics.lineStyle(Line.lineW, 0x75BEFF);
                 this.graphics.moveTo(this.x1, this.y1);
                 this.graphics.lineTo(endPoint[0], endPoint[1]);
                 this.graphics.endFill();

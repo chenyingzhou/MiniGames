@@ -2,9 +2,11 @@ namespace ButtonSet {
     export class ButtonSet extends egret.DisplayObjectContainer {
         protected static instance: ButtonSet;
         protected currentScene: string;
-        protected buttons = {
+        public buttons = {
+            "begin": new Button(Button.BEGIN),
             "start": new Button(Button.START),
             "rank": new Button(Button.RANK),
+            "music": new Button(Button.MUSIC),
             "share": new Button(Button.SHARE),
             "reset": new Button(Button.RESET),
             "back": new Button(Button.BACK),
@@ -25,7 +27,21 @@ namespace ButtonSet {
         protected onAddToStage(e: egret.Event) {
             this.width = this.stage.stageWidth;
             this.height = 120;
-            this.loadCommon(false);
+            // this.loadCover();
+        }
+
+        public loadCover() {
+            this.removeChildren();
+            this.y = this.stage.stageHeight / 5 * 4;
+            this.buttons.share.x = this.width / 4;
+            this.buttons.share.y = this.height / 2;
+            this.addChild(this.buttons.share);
+            this.buttons.rank.x = this.width / 4 * 2;
+            this.buttons.rank.y = this.height / 2;
+            this.addChild(this.buttons.rank);
+            this.buttons.music.x = this.width / 4 * 3;
+            this.buttons.music.y = this.height / 2;
+            this.addChild(this.buttons.music);
         }
 
         public loadCommon(animation: boolean = true) {
@@ -136,9 +152,11 @@ namespace ButtonSet {
     }
 
     class Button extends egret.Sprite {
+        public static BEGIN: string = "begin";
         public static START: string = "start";
         public static RANK: string = "rank";
-        public static SHARE: string = "share";
+        public static SHARE: string = "music";
+        public static MUSIC: string = "share";
         public static RESET: string = "reset";
         public static BACK: string = "back";
 
@@ -148,11 +166,17 @@ namespace ButtonSet {
             this.anchorOffsetX = this.anchorOffsetY = 60;
             this.scaleX = this.scaleY = 0.8;
             switch (type) {
+                case Button.BEGIN:
+                    this.drawBegin();
+                    break;
                 case Button.START:
                     this.drawStart();
                     break;
                 case Button.RANK:
                     this.drawRank();
+                    break;
+                case Button.MUSIC:
+                    this.drawMusic();
                     break;
                 case Button.SHARE:
                     this.drawShare();
@@ -168,7 +192,7 @@ namespace ButtonSet {
             }
         }
 
-        protected drawStart() {
+        protected drawBegin() {
             let bg = new egret.Shape();
             bg.graphics.beginFill(0x000000, 0);
             bg.graphics.drawRect(0, 0, 120, 120);
@@ -178,11 +202,38 @@ namespace ButtonSet {
             this.graphics.lineStyle(3, 0xffffff);
             this.graphics.drawCircle(60, 60, 60);
 
-            this.graphics.lineStyle(5, 0xffffff);
-            this.graphics.moveTo(105, 60);
-            this.graphics.lineTo(37.5, 18.75);
-            this.graphics.lineTo(37.5, 101.25);
-            this.graphics.lineTo(105, 60);
+            let img: egret.Bitmap = new egret.Bitmap();
+            img.texture = RES.getRes("play_png");
+            img.width = 60;
+            img.height = 80;
+            img.x = 35;
+            img.y = 20;
+            this.addChild(img);
+
+            this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+                Main.getInstance().loadBegin();
+            }, this);
+        }
+
+        protected drawStart() {
+            let bg = new egret.Shape();
+            bg.graphics.beginFill(0x000000, 0);
+            bg.graphics.drawRect(0, 0, 120, 120);
+            bg.graphics.endFill();
+            this.addChild(bg);
+
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
+            this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
+
+            let img: egret.Bitmap = new egret.Bitmap();
+            img.texture = RES.getRes("play_png");
+            img.width = 60;
+            img.height = 80;
+            img.x = 35;
+            img.y = 20;
+            this.addChild(img);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
                 Main.getInstance().startTask();
@@ -196,21 +247,39 @@ namespace ButtonSet {
             bg.graphics.endFill();
             this.addChild(bg);
 
-            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
             this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
 
-            this.graphics.lineStyle(4, 0xffffff);
-            this.graphics.moveTo(93.75, 97.5);
-            this.graphics.lineTo(26.25, 97.5);
-            this.graphics.lineTo(26.25, 45);
-            this.graphics.lineTo(48.75, 45);
-            this.graphics.lineTo(48.75, 97.5);
-            this.graphics.lineTo(48.75, 22.5);
-            this.graphics.lineTo(71.25, 22.7);
-            this.graphics.lineTo(71.25, 97.5);
-            this.graphics.lineTo(71.25, 60);
-            this.graphics.lineTo(93.75, 60);
-            this.graphics.lineTo(93.75, 97.5);
+            let img: egret.Bitmap = new egret.Bitmap();
+            img.texture = RES.getRes("rank_png");
+            img.width = img.height = 80;
+            img.x = img.y = 20;
+            this.addChild(img);
+
+            this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
+                //TODO: 排行榜
+            }, this);
+        }
+
+        protected drawMusic() {
+            let bg = new egret.Shape();
+            bg.graphics.beginFill(0x000000, 0);
+            bg.graphics.drawRect(0, 0, 120, 120);
+            bg.graphics.endFill();
+            this.addChild(bg);
+
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
+            this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
+
+            let img: egret.Bitmap = new egret.Bitmap();
+            img.texture = RES.getRes("music_png");
+            img.width = img.height = 80;
+            img.x = img.y = 20;
+            this.addChild(img);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
                 //TODO: 排行榜
@@ -224,18 +293,16 @@ namespace ButtonSet {
             bg.graphics.endFill();
             this.addChild(bg);
 
-            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
             this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
 
-            this.graphics.lineStyle(10, 0xffffff);
-            this.graphics.drawCircle(75, 30, 5);
-            this.graphics.drawCircle(22.5, 60, 5);
-            this.graphics.drawCircle(75, 90, 5);
-
-            this.graphics.lineStyle(5, 0xffffff);
-            this.graphics.moveTo(75, 30);
-            this.graphics.lineTo(22.5, 60);
-            this.graphics.lineTo(75, 90);
+            let img: egret.Bitmap = new egret.Bitmap();
+            img.texture = RES.getRes("share_png");
+            img.width = img.height = 80;
+            img.x = img.y = 20;
+            this.addChild(img);
 
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, () => {
                 //TODO: 分享
@@ -249,8 +316,10 @@ namespace ButtonSet {
             bg.graphics.endFill();
             this.addChild(bg);
 
-            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
             this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
 
             this.graphics.lineStyle(5, 0xffffff);
             this.graphics.drawArc(60, 60, 35, Math.PI * (-0.5), Math.PI);
@@ -271,8 +340,10 @@ namespace ButtonSet {
             bg.graphics.endFill();
             this.addChild(bg);
 
-            this.graphics.lineStyle(3, 0xffffff);
+            this.graphics.beginFill(0x75BEFF, 0.7);
+            this.graphics.lineStyle(3, 0x75BEFF);
             this.graphics.drawCircle(60, 60, 60);
+            this.graphics.endFill();
 
             this.graphics.lineStyle(5, 0xffffff);
             this.graphics.moveTo(100, 60);

@@ -1,6 +1,7 @@
 class Main extends egret.DisplayObjectContainer {
     protected static instance: Main;
     public backGround: BackGround;
+    public autoArea: PlayArea.PlayArea;
     public playArea: PlayArea.PlayArea;
     public navigation: Navigation.Navigation;
     public buttonSet: ButtonSet.ButtonSet;
@@ -24,17 +25,41 @@ class Main extends egret.DisplayObjectContainer {
     private async onAddToStage(event: egret.Event) {
         await Main.loadRes();
         this.backGround = new BackGround();
-        this.playArea = PlayArea.PlayArea.getInstance();
+        this.autoArea = new PlayArea.PlayArea();
+        this.playArea = new PlayArea.PlayArea();
         this.navigation = Navigation.Navigation.getInstance();
         this.buttonSet = ButtonSet.ButtonSet.getInstance();
+        this.loadCover();
+        // this.playArea.scaleX = this.playArea.scaleY = 0.8;
+        // this.playArea.touchChildren = false;
+        // this.playArea.touchEnabled = false;
+        // this.addChild(this.playArea);
+        // this.addChild(this.navigation);
+        // this.buttonSet.y = 640;
+        // this.addChild(this.buttonSet);
+    }
+
+    public async loadCover() {
         this.addChild(this.backGround);
-        this.playArea.scaleX = this.playArea.scaleY = 0.8;
-        this.playArea.touchChildren = false;
-        this.playArea.touchEnabled = false;
-        this.addChild(this.playArea);
-        this.addChild(this.navigation);
-        this.buttonSet.y = 640;
+        this.addChild(this.autoArea);
+        this.autoArea.touchEnabled = false;
+        this.autoArea.x = this.stage.stageWidth * 0.1;
+        this.autoArea.scaleX = this.autoArea.scaleY = 0.8;
+        let beginButton = this.buttonSet.buttons.begin;
+        this.addChild(beginButton);
+        beginButton.scaleX = beginButton.scaleY = 1.5;
+        beginButton.x = this.stage.stageWidth / 2;
+        beginButton.y = this.stage.stageHeight / 5 * 3;
         this.addChild(this.buttonSet);
+        this.buttonSet.loadCover();
+        while (PlayArea.PlayArea.isAutoPlay) {
+            await this.autoArea.autoPlay();
+        }
+    }
+
+    public loadBegin() {
+        PlayArea.PlayArea.isAutoPlay = false;
+
     }
 
     public startTask() {
