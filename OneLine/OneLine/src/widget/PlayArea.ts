@@ -295,7 +295,7 @@ namespace PlayArea {
         public y2: number;
         public color: number;
 
-        public constructor(color: number = 0XDDDDDD) {
+        public constructor(color: number = 0x75BEFF) {
             super();
             this.color = color;
         }
