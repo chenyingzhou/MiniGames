@@ -5,6 +5,7 @@ class Main extends egret.DisplayObjectContainer {
     public playArea: PlayArea.PlayArea;
     public navigation: Navigation.Navigation;
     public buttonSet: ButtonSet.ButtonSet;
+    public beginButton: any;
 
     public constructor() {
         super();
@@ -26,30 +27,24 @@ class Main extends egret.DisplayObjectContainer {
         await Main.loadRes();
         this.backGround = new BackGround();
         this.autoArea = new PlayArea.PlayArea();
-        this.playArea = new PlayArea.PlayArea();
+        this.playArea = PlayArea.PlayArea.getInstance();
         this.navigation = Navigation.Navigation.getInstance();
         this.buttonSet = ButtonSet.ButtonSet.getInstance();
         this.loadCover();
-        // this.playArea.scaleX = this.playArea.scaleY = 0.8;
-        // this.playArea.touchChildren = false;
-        // this.playArea.touchEnabled = false;
-        // this.addChild(this.playArea);
-        // this.addChild(this.navigation);
-        // this.buttonSet.y = 640;
-        // this.addChild(this.buttonSet);
     }
 
     public async loadCover() {
         this.addChild(this.backGround);
         this.addChild(this.autoArea);
-        this.autoArea.touchEnabled = false;
+        this.autoArea.switchTo(0, 1);
+        this.autoArea.touchEnabled = this.autoArea.touchChildren = false;
         this.autoArea.x = this.stage.stageWidth * 0.1;
         this.autoArea.scaleX = this.autoArea.scaleY = 0.8;
-        let beginButton = this.buttonSet.buttons.begin;
-        this.addChild(beginButton);
-        beginButton.scaleX = beginButton.scaleY = 1.5;
-        beginButton.x = this.stage.stageWidth / 2;
-        beginButton.y = this.stage.stageHeight / 5 * 3;
+        this.beginButton = this.buttonSet.buttons.begin;
+        this.addChild(this.beginButton);
+        this.beginButton.scaleX = this.beginButton.scaleY = 1.5;
+        this.beginButton.x = this.stage.stageWidth / 2;
+        this.beginButton.y = this.stage.stageHeight / 5 * 3;
         this.addChild(this.buttonSet);
         this.buttonSet.loadCover();
         while (PlayArea.PlayArea.isAutoPlay) {
@@ -59,7 +54,41 @@ class Main extends egret.DisplayObjectContainer {
 
     public loadBegin() {
         PlayArea.PlayArea.isAutoPlay = false;
+        this.playArea.scaleX = this.playArea.scaleY = 0.8;
+        this.playArea.touchChildren = false;
+        this.playArea.touchEnabled = false;
+        this.playArea.alpha = 0;
+        this.navigation.alpha = 0;
+        this.addChild(this.playArea);
+        this.addChild(this.navigation);
 
+        let alpha = 1;
+        let animationOut = () => {
+            if (alpha <= 0) {
+                this.removeChild(this.autoArea);
+                this.removeChild(this.beginButton);
+                this.buttonSet.loadCommon(false);
+                egret.startTick(animationIn, this);
+                egret.stopTick(animationOut, this);
+            }
+            this.autoArea.alpha = alpha;
+            this.beginButton.alpha = alpha;
+            this.buttonSet.alpha = alpha;
+            alpha -= 0.05;
+            return true;
+        };
+        alpha = 0;
+        let animationIn = () => {
+            if (alpha > 1) {
+                egret.stopTick(animationIn, this);
+            }
+            this.playArea.alpha = alpha;
+            this.navigation.alpha = alpha;
+            this.buttonSet.alpha = alpha;
+            alpha += 0.05;
+            return true;
+        };
+        egret.startTick(animationOut, this);
     }
 
     public startTask() {
