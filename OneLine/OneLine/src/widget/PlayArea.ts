@@ -282,7 +282,11 @@ namespace PlayArea {
         // }
 
         public onTouchMove(evt: egret.TouchEvent) {
-            if (!this.parent.activeDot || this === this.parent.activeDot || 0 === this.parent.dotRelation.length) {
+            if (0 === this.parent.dotRelation.length && !this.parent.activeLine) {
+                this.preDrawLine();
+                return;
+            }
+            if (!this.parent.activeDot || this === this.parent.activeDot) {
                 this.preDrawLine();
                 return;
             }
