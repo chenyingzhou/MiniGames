@@ -253,7 +253,7 @@ namespace PlayArea {
             super();
             this.drawBody();
             this.touchEnabled = true;
-            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+            // this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
             this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
             this.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchMove, this); // 点击事件视为TOUCH_MOVE
         }
@@ -264,16 +264,21 @@ namespace PlayArea {
             this.graphics.endFill();
         }
 
-        public onTouchBegin(evt: egret.TouchEvent) {
-            if (!this.parent.activeDot || this === this.parent.activeDot) {
-                this.preDrawLine();
-            }
-        }
+        // public onTouchBegin(evt: egret.TouchEvent) {
+        //     if (!this.parent.activeDot || this === this.parent.activeDot) {
+        //         this.preDrawLine();
+        //     }
+        // }
 
         public onTouchMove(evt: egret.TouchEvent) {
+            if (!this.parent.activeDot || this === this.parent.activeDot) {
+                this.preDrawLine();
+                return;
+            }
             if (this.isNeighborWith(this.parent.activeDot)) {
                 this.parent.drawLineBetween(this.parent.activeDot, this);
                 this.preDrawLine();
+                return;
             }
         }
 
