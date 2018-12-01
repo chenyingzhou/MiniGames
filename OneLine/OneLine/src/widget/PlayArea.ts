@@ -110,11 +110,15 @@ namespace PlayArea {
         }
 
         public onTouchEnd(evt: egret.TouchEvent) {
-            this.clearActiveLine();
+            if (this.activeLine) {
+                this.clearActiveLine();
+            }
         }
 
         public onTouchReleaseOutside(evt: egret.TouchEvent) {
-            this.clearActiveLine();
+            if (this.activeLine) {
+                this.clearActiveLine();
+            }
         }
 
         public onTouchBegin(evt: egret.TouchEvent) {
@@ -282,16 +286,18 @@ namespace PlayArea {
         // }
 
         public onTouchMove(evt: egret.TouchEvent) {
-            if (0 === this.parent.dotRelation.length && !this.parent.activeLine) {
+            if (this.parent.activeDot && this.isNeighborWith(this.parent.activeDot)) {
+                this.parent.drawLineBetween(this.parent.activeDot, this);
                 this.preDrawLine();
                 return;
             }
+
             if (!this.parent.activeDot || this === this.parent.activeDot) {
                 this.preDrawLine();
                 return;
             }
-            if (this.isNeighborWith(this.parent.activeDot)) {
-                this.parent.drawLineBetween(this.parent.activeDot, this);
+
+            if (0 === this.parent.dotRelation.length && !this.parent.activeLine) {
                 this.preDrawLine();
                 return;
             }
