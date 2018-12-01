@@ -56,7 +56,7 @@ class Main extends egret.DisplayObjectContainer {
         PlayArea.PlayArea.isAutoPlay = false;
         this.playArea.scaleX = this.playArea.scaleY = 0.8;
         this.playArea.touchChildren = false;
-        this.playArea.touchEnabled = false;
+        // this.playArea.touchEnabled = false;
         this.playArea.alpha = 0;
         this.playArea.y = this.stage.stageHeight / 8;
         this.navigation.alpha = 0;
@@ -81,6 +81,7 @@ class Main extends egret.DisplayObjectContainer {
         alpha = 0;
         let animationIn = () => {
             if (alpha > 1) {
+                this.playArea.touchToStart = true;
                 egret.stopTick(animationIn, this);
             }
             this.playArea.alpha = alpha;
@@ -96,6 +97,7 @@ class Main extends egret.DisplayObjectContainer {
         this.navigation.touchChildren = this.navigation.touchEnabled = false;
         this.playArea.touchChildren = this.playArea.touchEnabled = false;
         this.buttonSet.touchChildren = this.buttonSet.touchEnabled = false;
+        this.playArea.touchToStart = false;
         this.buttonSet.loadStart();
         let onStartTask = () => {
             this.navigation.x += 7;
@@ -115,7 +117,7 @@ class Main extends egret.DisplayObjectContainer {
 
     public endTask(pass: boolean = true) {
         this.navigation.touchChildren = this.navigation.touchEnabled = false;
-        this.playArea.touchChildren = this.playArea.touchEnabled = false;
+        this.playArea.touchChildren = false;
         this.buttonSet.touchChildren = this.buttonSet.touchEnabled = false;
         this.buttonSet.loadCommon();
         let onEndTask = () => {
@@ -125,6 +127,7 @@ class Main extends egret.DisplayObjectContainer {
             if (this.playArea.scaleX <= 0.8) {
                 this.playArea.scaleX = 0.8;
                 this.playArea.scaleY = 0.8;
+                this.playArea.touchToStart = true;
                 this.navigation.touchChildren = this.navigation.touchEnabled = true;
                 this.buttonSet.touchChildren = this.buttonSet.touchEnabled = true;
                 if (pass) {  // 过关则切换到下一关

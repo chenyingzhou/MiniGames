@@ -1,5 +1,6 @@
 namespace PlayArea {
     export class PlayArea extends egret.DisplayObjectContainer {
+        public touchToStart = false;
         public activeDot: Dot;
         public activeLine: Line;
         public background: egret.Shape;
@@ -33,6 +34,7 @@ namespace PlayArea {
             this.background.graphics.drawRect(0, 0, Main.getInstance().stage.stageWidth, PlayArea.gridWidth * 8 + PlayArea.reservedH * 2);
             this.background.alpha = 0;
             this.switchTo(DataProvider.getTopTask(), 1);
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
         }
 
         /**
@@ -113,6 +115,12 @@ namespace PlayArea {
 
         public onTouchReleaseOutside(evt: egret.TouchEvent) {
             this.clearActiveLine();
+        }
+
+        public onTouchBegin(evt: egret.TouchEvent) {
+            if (this.touchToStart) {
+                Main.getInstance().startTask();
+            }
         }
 
         /**
