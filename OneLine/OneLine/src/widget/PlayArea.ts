@@ -150,6 +150,9 @@ namespace PlayArea {
         }
 
         public drawActiveLine(endX: number, endY: number) {
+            if (!this.activeLine) {
+                return;
+            }
             this.activeLine.setPointEnd(endX, endY);
         }
 
@@ -279,7 +282,7 @@ namespace PlayArea {
         // }
 
         public onTouchMove(evt: egret.TouchEvent) {
-            if (!this.parent.activeDot || this === this.parent.activeDot) {
+            if (!this.parent.activeDot || this === this.parent.activeDot || 0 === this.parent.dotRelation.length) {
                 this.preDrawLine();
                 return;
             }
