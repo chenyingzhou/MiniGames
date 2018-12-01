@@ -33,13 +33,10 @@ namespace ButtonSet {
         public loadCover() {
             this.removeChildren();
             this.y = this.stage.stageHeight / 5 * 4;
-            this.buttons.share.x = this.width / 4;
+            this.buttons.share.x = this.width / 3;
             this.buttons.share.y = this.height / 2;
             this.addChild(this.buttons.share);
-            this.buttons.rank.x = this.width / 4 * 2;
-            this.buttons.rank.y = this.height / 2;
-            this.addChild(this.buttons.rank);
-            this.buttons.music.x = this.width / 4 * 3;
+            this.buttons.music.x = this.width / 3 * 2;
             this.buttons.music.y = this.height / 2;
             this.addChild(this.buttons.music);
         }
@@ -47,13 +44,10 @@ namespace ButtonSet {
         public loadCommon(animation: boolean = true) {
             let load = () => {
                 this.removeChildren();
-                this.buttons.share.x = this.width / 4;
+                this.buttons.share.x = this.width / 3;
                 this.buttons.share.y = this.height / 2;
                 this.addChild(this.buttons.share);
-                this.buttons.rank.x = this.width / 4 * 2;
-                this.buttons.rank.y = this.height / 2;
-                this.addChild(this.buttons.rank);
-                this.buttons.start.x = this.width / 4 * 3;
+                this.buttons.start.x = this.width / 3 * 2;
                 this.buttons.start.y = this.height / 2;
                 this.addChild(this.buttons.start);
             };

@@ -58,6 +58,7 @@ class Main extends egret.DisplayObjectContainer {
         this.playArea.touchChildren = false;
         this.playArea.touchEnabled = false;
         this.playArea.alpha = 0;
+        this.playArea.y = this.stage.stageHeight / 8;
         this.navigation.alpha = 0;
         this.addChild(this.playArea);
         this.addChild(this.navigation);
@@ -130,6 +131,10 @@ class Main extends egret.DisplayObjectContainer {
                     setTimeout(() => {
                         this.navigation.scrollToNext();
                     }, 200);
+                    // 过关进入下一关
+                    setTimeout(() => {
+                        Main.getInstance().startTask();
+                    }, 1000)
                 }
                 egret.stopTick(onEndTask, this);
             }
